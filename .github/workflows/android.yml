@@ -1,17 +1,15 @@
+# ── QUAN s'executa el pipeline ──────────────────────────
 name: Android CI
-
 on:
   push:
-    branches: [ master, main ]
-  pull_request:
-    branches: [ master, main ]
+    branches: [ master, main ]   # En cada push a main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout del codi del repositori
+      - name: Checkout del codi
         uses: actions/checkout@v3
 
       - name: Configurar Java 17
@@ -20,17 +18,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # ── 3. ECHO ABANS ───────────────────────────────────
       - name: Missatge INICI
-        run: echo ">>> INICI DEL PIPELINE: Iniciant construcció i tests de l'app Android <<<"
+        run: echo ">>> INICI DEL PIPELINE <<<"
 
-      - name: Donar permisos a Gradle
+      - name: Permisos a Gradle
         run: chmod +x gradlew
 
+      # ── 1. BUILD ────────────────────────────────────────
       - name: BUILD - Construir l'aplicació
         run: ./gradlew build
 
+      # ── 2. TEST ─────────────────────────────────────────
       - name: TEST - Executar tots els tests
         run: ./gradlew test
 
+      # ── 3. ECHO DESPRÉS ─────────────────────────────────
       - name: Missatge FINAL
-        run: echo ">>> PIPELINE COMPLETAT: Build i tests executats correctament <<<"
+        run: echo ">>> PIPELINE COMPLETAT <<<"
